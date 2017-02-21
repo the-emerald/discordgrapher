@@ -1,2 +1,2 @@
 # discordgrapher
-Graphing Discord server/channel activity.
+Graphing Discord server/channel activity with Python.
