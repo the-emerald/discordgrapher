@@ -1,7 +1,6 @@
 import discord
 import asyncio
 from tqdm import tqdm
-#from sys import argv
 import argparse
 
 parser = argparse.ArgumentParser(description='Discord channel scraper')
@@ -13,22 +12,20 @@ args = parser.parse_args()
 print(args.channel)
 print(args.output)
 
-#script, fileName = argv
 client = discord.Client()
 
 @client.event
 async def on_ready():
     print('Connection successful.')
-    print('ID: ' + client.user.id)
-    print('-----')
+    print('Your ID: ' + client.user.id)
     target = open(args.output, 'w')
     print(args.output, 'has been opened.')
 
     messageCount = 0
     channel = discord.Object(id=args.channel)
 
-    print('Scraping messages...')
-    with tqdm(leave=True,unit='messages') as scraped:
+    print("Scraping messages... Don't send any messages while scraping!")
+    with tqdm(leave=True,unit=' messages') as scraped:
         async for msg in client.logs_from(channel, 10000000000):
             line = "{} - {}: {}".format(msg.timestamp,msg.author.name, msg.content)
             line = line.encode('utf-8')
@@ -36,8 +33,6 @@ async def on_ready():
             target.write(toWrite)
             target.write("\n")
             messageCount += 1
-            #print(messageCount)
-            #print(msg.author,msg.content)
             scraped.update(1)
     print('-----')
     print('Scraping complete.')
