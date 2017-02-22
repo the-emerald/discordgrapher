@@ -18,3 +18,10 @@ with tqdm(leave=True,unit=' messages',total=lineNumber, desc="Reading file") as 
             textfileArray.append(line)
             counter.update(1)
 
+processedArray = []
+with tqdm(leave=True,unit=' messages',total=lineNumber, desc="Processing - Stage 1") as counter:
+    for line in textfileArray:
+        lineSplitted = line.split(" - ") #line[0] is timestamp, line[1] is name, discard the rest
+        processedArray.append([lineSplitted[0],lineSplitted[1]])
+        counter.update(1)
+
