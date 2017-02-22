@@ -2,10 +2,32 @@ from tqdm import tqdm
 import argparse
 import datetime
 import time
+#import matplotlib
+import copy
+
+def plotLong(): #Plotting messages/day vs day)
+    print("OK, now generating a long graph.")
+    plotLongArray = copy.copy(processedArray) #A bit inefficient but it'll do.
+    with tqdm(leave=True,unit=' messages', total=lineNumber, desc="Preparing") as counter:
+        for line in plotLongArray:
+            line[0] = datetime.date.fromtimestamp(line[0])
+            counter.update(1)
+    #plotLongDateString = copy.copy(plotLongArray)
+    #with tqdm(leave=True,unit=' messages', total=lineNumber, desc="More preparing") as counter:
+    #    for line in plotLongDateString:
+    #        line[0] = str(line[0])
+    #        counter.update(1)
+    for row in plotLongArray:
+        del row[1]
+    plotLongDateString2 = [item for sublist in plotLongArray for item in sublist]
+    plotLongCount = [[x,plotLongDateString2.count(x)] for x in set(plotLongDateString2)]
+    print(len(plotLongCount))
 
 parser = argparse.ArgumentParser(description='Discord channel imager. Remember to scrape using scrape.py first!')
 requiredNamed = parser.add_argument_group('Required arguments')
 requiredNamed.add_argument('-i', '--input', type=str, help='Textfile source. Must be unaltered output from scrape.py.', required=True)
+optional = parser.add_argument_group('Optional arguments')
+
 args = parser.parse_args()
 
 textfile = open(args.input, 'r')
@@ -44,3 +66,5 @@ with tqdm(leave=True,unit=' messages', total=lineNumber, desc="Processing - Stag
         combined = datetime.datetime.combine(dateString,timeString)
         line[0] = time.mktime(combined.timetuple())
         counter.update(1)
+
+plotLong()
