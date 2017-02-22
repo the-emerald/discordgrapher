@@ -25,7 +25,7 @@ async def on_ready():
     print("Scraping messages... Don't send any messages while scraping!")
     with tqdm(leave=True,unit=' messages') as scraped:
         async for msg in client.logs_from(channel, 10000000000):
-            line = "{} - {}: {}".format(msg.timestamp,msg.author.name, msg.content)
+            line = "{} - {} - {}".format(msg.timestamp,msg.author.name, msg.content)
             line = line.encode('utf-8')
             toWrite = "{}".format(line)
             target.write(toWrite)
