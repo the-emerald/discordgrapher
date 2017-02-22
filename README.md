@@ -4,3 +4,5 @@ Graphing Discord server/channel activity with Python.
 * Python 3.5+
 * Discord.py
 * tqdm
+* matplotlib
+
