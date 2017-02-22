@@ -9,8 +9,6 @@ requiredNamed.add_argument('-c', '--channel', type=str, help='Channel to scrape.
 requiredNamed.add_argument('-o', '--output', type=str, help='Output file in form *.txt. Will be stored in the same directory.', required=True)
 
 args = parser.parse_args()
-print(args.channel)
-print(args.output)
 
 client = discord.Client()
 
