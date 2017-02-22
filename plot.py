@@ -2,8 +2,11 @@ from tqdm import tqdm
 import argparse
 import datetime
 import time
-#import matplotlib
 import copy
+
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 
 def plotLong(): #Plotting messages/day vs day)
     print("OK, now generating a long graph.")
@@ -12,16 +15,25 @@ def plotLong(): #Plotting messages/day vs day)
         for line in plotLongArray:
             line[0] = datetime.date.fromtimestamp(line[0])
             counter.update(1)
-    #plotLongDateString = copy.copy(plotLongArray)
-    #with tqdm(leave=True,unit=' messages', total=lineNumber, desc="More preparing") as counter:
-    #    for line in plotLongDateString:
-    #        line[0] = str(line[0])
-    #        counter.update(1)
     for row in plotLongArray:
         del row[1]
+    print("Now crunching numbers...")
     plotLongDateString2 = [item for sublist in plotLongArray for item in sublist]
     plotLongCount = [[x,plotLongDateString2.count(x)] for x in set(plotLongDateString2)]
-    print(len(plotLongCount))
+    r = np.asarray(plotLongCount)
+    r = r[r[:,0].argsort()]
+    years = mdates.YearLocator()
+    months = mdates.MonthLocator()
+    yearsFmt = mdates.DateFormatter('%Y')
+    fig, ax = plt.subplots()
+    ax.plot(r[:,0],r[:,1])
+    ax.xaxis.set_major_locator(years)
+    ax.xaxis.set_major_formatter(yearsFmt)
+    ax.xaxis.set_minor_locator(months)
+    ax.format_xdata = mdates.DateFormatter('%Y-%m-%d')
+    ax.grid(True)
+    fig.autofmt_xdate()
+    plt.show()
 
 parser = argparse.ArgumentParser(description='Discord channel imager. Remember to scrape using scrape.py first!')
 requiredNamed = parser.add_argument_group('Required arguments')
