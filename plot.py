@@ -44,7 +44,3 @@ with tqdm(leave=True,unit=' messages', total=lineNumber, desc="Processing - Stag
         combined = datetime.datetime.combine(dateString,timeString)
         line[0] = time.mktime(combined.timetuple())
         counter.update(1)
-
-for x in processedArray:
-    if x[0] != int(x[0]):
-        print(x)
