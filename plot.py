@@ -42,6 +42,7 @@ parser = argparse.ArgumentParser(description='Discord channel imager. Remember t
 requiredNamed = parser.add_argument_group('Required arguments')
 requiredNamed.add_argument('-i', '--input', type=str, help='Textfile source. Must be unaltered output from scrape.py.', required=True)
 optional = parser.add_argument_group('Optional arguments')
+optional.add_argument('-l', '--graphlong', action='store_true', help='Graph long a long-term graph.')
 
 args = parser.parse_args()
 
@@ -82,4 +83,7 @@ with tqdm(leave=True,unit=' messages', total=lineNumber, desc="Processing - Stag
         line[0] = time.mktime(combined.timetuple())
         counter.update(1)
 
-plotLong()
+if args.graphlong:
+    plotLong()
+else:
+    pass
