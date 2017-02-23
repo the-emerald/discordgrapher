@@ -61,15 +61,25 @@ def plotWeek(): #Plotting messges/day for a week (combined)
     for line in plotWeekCountSorted:
         line = [weekdaysDictInverse[n] if n in weekdaysDictInverse else n for n in line]
         plotWeekCount.append(line)
-    #r = np.asarray(plotWeekCount)
-    #r = r[r[:,0].argsort()]
-    #print(r)
+    fig, ax = plt.subplots()
+    daysOfWeek = []
+    frequency = []
+    for line in plotWeekCount:
+        daysOfWeek.append(line[0])
+        frequency.append(line[1])
+    y_pos = np.arange(len(daysOfWeek))
+    plt.bar(y_pos, frequency, align='center', alpha=0.5)
+    plt.xticks(y_pos, daysOfWeek)
+    plt.ylabel('Messages')
+    plt.show()
+    quit()
 
 parser = argparse.ArgumentParser(description='Discord channel imager. Remember to scrape using scrape.py first!')
 requiredNamed = parser.add_argument_group('Required arguments')
 requiredNamed.add_argument('-i', '--input', type=str, help='Textfile source. Must be unaltered output from scrape.py.', required=True)
-optional = parser.add_argument_group('Optional arguments')
-optional.add_argument('-l', '--graphlong', action='store_true', help='Graph long a long-term graph.')
+optional = parser.add_argument_group('Optional arguments, pick one')
+optional.add_argument('-l', '--graphlong', action='store_true', help='Graph a long-term graph.')
+optional.add_argument('-w', '--graphweek', action='store_true', help='Graph a messages per weekday graph')
 
 args = parser.parse_args()
 
@@ -110,8 +120,9 @@ with tqdm(leave=True,unit=' messages', total=lineNumber, desc="Processing - Stag
         line[0] = time.mktime(combined.timetuple())
         counter.update(1)
 
-plotWeek()
 if args.graphlong:
     plotLong()
+elif args.graphweek:
+    plotWeek()
 else:
-    pass
+    print("Looks like you forgot to pick a graph... Aborting.")
