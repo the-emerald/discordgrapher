@@ -82,7 +82,7 @@ optional = parser.add_argument_group('Plotting arguments, pick one')
 optional.add_argument('-l', '--graphlong', action='store_true', help='Graph a long-term graph.')
 optional.add_argument('-w', '--graphweek', action='store_true', help='Graph a messages per weekday graph')
 kw = parser.add_argument_group('Graph modifications')
-kw.add_argument('-s', '--search', type=str, help='Search and only plot specific phrase.')
+kw.add_argument('-s', '--search', type=str, default="None", help='Search and only plot specific phrase.')
 
 args = parser.parse_args()
 
