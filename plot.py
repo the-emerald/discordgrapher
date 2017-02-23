@@ -11,7 +11,7 @@ import matplotlib.dates as mdates
 def plotLong(): #Plotting messages/day vs day)
     print("OK, now generating a long graph.")
     plotLongArray = copy.copy(processedArray) #A bit inefficient but it'll do.
-    with tqdm(leave=True,unit=' messages', total=lineNumber, desc="Preparing") as counter:
+    with tqdm(leave=True, unit=' messages', total=lineNumber, desc="Preparing") as counter:
         for line in plotLongArray:
             line[0] = datetime.date.fromtimestamp(line[0])
             counter.update(1)
@@ -38,10 +38,48 @@ def plotLong(): #Plotting messages/day vs day)
     plt.show()
     quit()
 
+def plotWeek(): #Plotting messges/day for a week (combined)
+    print("Ok, now generating a week graph.")
+    plotWeekArray = copy.copy(processedArray) #Again, a bit inefficient.
+    with tqdm(leave=True, unit=' messages', total=lineNumber, desc="Preparing") as counter:
+        for line in plotWeekArray:
+            line[0] = datetime.datetime.fromtimestamp(line[0]).strftime('%A')
+            counter.update(1)
+    for row in plotWeekArray:
+        del row[1]
+    print("Now crunching numbers...")
+    plotWeekString = [item for sublist in plotWeekArray for item in sublist]
+    plotWeekCount = [[x,plotWeekString.count(x)] for x in set(plotWeekString)]
+    weekdaysDict = {"Monday":1, "Tuesday":2, "Wednesday":3, "Thursday":4, "Friday":5, "Saturday":6, "Sunday":7}
+    weekdaysDictInverse = {1:"Monday", 2:"Tuesday", 3:"Wednesday", 4:"Thursday", 5:"Friday", 6:"Saturday", 7:"Sunday"}
+    plotWeekCountInt = []
+    for line in plotWeekCount:
+        line = [weekdaysDict[n] if n in weekdaysDict else n for n in line]
+        plotWeekCountInt.append(line)
+    plotWeekCount.clear()
+    plotWeekCountSorted = sorted(plotWeekCountInt, key=lambda l:l[0])
+    for line in plotWeekCountSorted:
+        line = [weekdaysDictInverse[n] if n in weekdaysDictInverse else n for n in line]
+        plotWeekCount.append(line)
+    fig, ax = plt.subplots()
+    daysOfWeek = []
+    frequency = []
+    for line in plotWeekCount:
+        daysOfWeek.append(line[0])
+        frequency.append(line[1])
+    y_pos = np.arange(len(daysOfWeek))
+    plt.bar(y_pos, frequency, align='center', alpha=0.5)
+    plt.xticks(y_pos, daysOfWeek)
+    plt.ylabel('Messages')
+    plt.show()
+    quit()
+
 parser = argparse.ArgumentParser(description='Discord channel imager. Remember to scrape using scrape.py first!')
 requiredNamed = parser.add_argument_group('Required arguments')
 requiredNamed.add_argument('-i', '--input', type=str, help='Textfile source. Must be unaltered output from scrape.py.', required=True)
-optional = parser.add_argument_group('Optional arguments')
+optional = parser.add_argument_group('Optional arguments, pick one')
+optional.add_argument('-l', '--graphlong', action='store_true', help='Graph a long-term graph.')
+optional.add_argument('-w', '--graphweek', action='store_true', help='Graph a messages per weekday graph')
 
 args = parser.parse_args()
 
@@ -82,4 +120,9 @@ with tqdm(leave=True,unit=' messages', total=lineNumber, desc="Processing - Stag
         line[0] = time.mktime(combined.timetuple())
         counter.update(1)
 
-plotLong()
+if args.graphlong:
+    plotLong()
+elif args.graphweek:
+    plotWeek()
+else:
+    print("Looks like you forgot to pick a graph... Aborting.")
