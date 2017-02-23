@@ -78,16 +78,17 @@ def plotWeek(): #Plotting messges/day for a week (combined)
 parser = argparse.ArgumentParser(description='Discord channel imager. Remember to scrape using scrape.py first!')
 requiredNamed = parser.add_argument_group('Required arguments')
 requiredNamed.add_argument('-i', '--input', type=str, help='Textfile source. Must be unaltered output from scrape.py.', required=True)
-optional = parser.add_argument_group('Optional arguments, pick one')
+optional = parser.add_argument_group('Plotting arguments, pick one')
 optional.add_argument('-l', '--graphlong', action='store_true', help='Graph a long-term graph.')
 optional.add_argument('-w', '--graphweek', action='store_true', help='Graph a messages per weekday graph')
+kw = parser.add_argument_group('Graph modifications')
+kw.add_argument('-s', '--search', type=str, help='Search and only plot specific phrase.')
 
 args = parser.parse_args()
 
 textfile = open(args.input, 'r')
 textfileArray = []
 lineNumber = sum(1 for line in textfile)
-
 textfile = open(args.input, 'r')
 with tqdm(leave=True,unit=' messages', total=lineNumber, desc="Reading file") as counter:
     with textfile as text:
@@ -100,8 +101,25 @@ processedArray = []
 with tqdm(leave=True,unit=' messages', total=lineNumber, desc="Processing - Stage 1") as counter:
     for line in textfileArray:
         lineSplitted = line.split(" - ") #lineSplitted[0] is timestamp, lineSplitted[1] is name, discard the rest
-        processedArray.append([lineSplitted[0],lineSplitted[1]])
+        if args.search is not "None":
+            processedArray.append([lineSplitted[0],lineSplitted[1],lineSplitted[2]]) #lineSplitted[2] is the message.
+        else:
+            processedArray.append([lineSplitted[0],lineSplitted[1]])
         counter.update(1)
+
+if args.search is not "None":
+    processedArraySearch = []
+    with tqdm(leave=True,unit=' messages', total=lineNumber, desc="Filtering keywords") as counter:
+        for line in processedArray:
+            if args.search in line[2]:
+                processedArraySearch.append([line[0],line[1]])
+            else:
+                pass
+            counter.update(1)
+    processedArray.clear()
+    processedArray = copy.copy(processedArraySearch)
+    lineNumber = len(processedArray)
+
 
 with tqdm(leave=True,unit=' messages', total=lineNumber, desc="Processing - Stage 2") as counter:
     for line in processedArray:
@@ -120,6 +138,7 @@ with tqdm(leave=True,unit=' messages', total=lineNumber, desc="Processing - Stag
         combined = datetime.datetime.combine(dateString,timeString)
         line[0] = time.mktime(combined.timetuple())
         counter.update(1)
+
 
 if args.graphlong:
     plotLong()
