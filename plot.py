@@ -71,6 +71,7 @@ def plotWeek(): #Plotting messges/day for a week (combined)
     plt.bar(y_pos, frequency, align='center', alpha=0.5)
     plt.xticks(y_pos, daysOfWeek)
     plt.ylabel('Messages')
+    ax.grid(True)
     plt.show()
     quit()
 
