@@ -8,7 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
-def plotLong(): #Plotting messages/day vs day)
+def plotLong(): #Plotting messages/day vs day
     print("OK, now generating a long graph.")
     plotLongArray = copy.copy(processedArray) #A bit inefficient but it'll do.
     with tqdm(leave=True, unit=' messages', total=lineNumber, desc="Preparing") as counter:
@@ -39,7 +39,7 @@ def plotLong(): #Plotting messages/day vs day)
     plt.show()
     quit()
 
-def plotWeekLegacy(): #Plotting messges/day for a week (combined)
+def plotWeekLegacy(): #Legacy barchart plotting messges/day for a week (combined)
     print("Ok, now generating a week graph.")
     plotWeekArray = copy.copy(processedArray) #Again, a bit inefficient.
     with tqdm(leave=True, unit=' messages', total=lineNumber, desc="Preparing") as counter:
@@ -79,7 +79,7 @@ def plotWeekLegacy(): #Plotting messges/day for a week (combined)
     quit()
 
 def plotWeekHour(): #Plotting messges per hour for a week
-    print("Ok, now generating a week graph.") #It's the same as #plotWeek but that's going to be replaced soon.
+    print("Ok, now generating a week graph.")o
     plotWeekArray = copy.copy(processedArray)
     with tqdm(leave=True, unit= 'messages', total=lineNumber, desc="Preparing") as counter:
         for line in plotWeekArray:
@@ -107,8 +107,8 @@ parser = argparse.ArgumentParser(description='Discord channel imager. Remember t
 requiredNamed = parser.add_argument_group('Required arguments')
 requiredNamed.add_argument('-i', '--input', type=str, help='Textfile source. Must be unaltered output from scrape.py.', required=True)
 optional = parser.add_argument_group('Plotting arguments, pick one')
-optional.add_argument('-l', '--graphlong', action='store_true', help='Graph a long-term graph.')
-optional.add_argument('-w', '--graphweek', action='store_true', help='Graph a messages per weekday graph')
+optional.add_argument('-l', '--graphlong', action='store_true', help='Graph a long-term graph')
+optional.add_argument('-w', '--graphweek', action='store_true', help='Graph a messages per hour over a weekday')
 kw = parser.add_argument_group('Graph modifications')
 kw.add_argument('-s', '--search', type=str, default="None", help='Search and only plot specific phrase.')
 
