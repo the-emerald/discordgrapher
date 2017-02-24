@@ -20,6 +20,7 @@ def plotLong(): #Plotting messages/day vs day)
     print("Now crunching numbers...")
     plotLongDateString2 = [item for sublist in plotLongArray for item in sublist]
     plotLongCount = [[x,plotLongDateString2.count(x)] for x in set(plotLongDateString2)]
+    print(plotLongCount)
     r = np.asarray(plotLongCount)
     r = r[r[:,0].argsort()]
     years = mdates.YearLocator()
@@ -38,7 +39,7 @@ def plotLong(): #Plotting messages/day vs day)
     plt.show()
     quit()
 
-def plotWeek(): #Plotting messges/day for a week (combined)
+def plotWeekLegacy(): #Plotting messges/day for a week (combined)
     print("Ok, now generating a week graph.")
     plotWeekArray = copy.copy(processedArray) #Again, a bit inefficient.
     with tqdm(leave=True, unit=' messages', total=lineNumber, desc="Preparing") as counter:
@@ -61,6 +62,8 @@ def plotWeek(): #Plotting messges/day for a week (combined)
     for line in plotWeekCountSorted:
         line = [weekdaysDictInverse[n] if n in weekdaysDictInverse else n for n in line]
         plotWeekCount.append(line)
+    print(plotWeekCountSorted)
+    return 0
     fig, ax = plt.subplots()
     daysOfWeek = []
     frequency = []
@@ -74,6 +77,31 @@ def plotWeek(): #Plotting messges/day for a week (combined)
     ax.grid(True)
     plt.show()
     quit()
+
+def plotWeekHour(): #Plotting messges per hour for a week
+    print("Ok, now generating a week graph.") #It's the same as #plotWeek but that's going to be replaced soon.
+    plotWeekArray = copy.copy(processedArray)
+    with tqdm(leave=True, unit= 'messages', total=lineNumber, desc="Preparing") as counter:
+        for line in plotWeekArray:
+            second = datetime.timedelta(seconds=int((line[0]-345600)%604800))
+            h = datetime.datetime(1,1,1)+second
+            line[0] = h.hour+((h.day-1)*24)
+            counter.update(1)
+    for row in plotWeekArray:
+        del row[1]
+    plotWeekFlat= [item for sublist in plotWeekArray for item in sublist]
+    plotWeekHourCount = [[x,plotWeekFlat.count(x)] for x in set(plotWeekFlat)]
+    r = np.asarray(plotWeekHourCount)
+    r = r[r[:,0].argsort()]
+    fig, ax = plt.subplots()
+    ax.plot(r[:,0],r[:,1])
+    ax.grid(True)
+    plt.xlabel("Hour of Week (Starts Sunday 0000UTC)")
+    plt.ylabel("Messages")
+    plt.xticks(np.arange(min(r[:,0]), max(r[:,0]), 24))
+    plt.show()
+    quit()
+
 
 parser = argparse.ArgumentParser(description='Discord channel imager. Remember to scrape using scrape.py first!')
 requiredNamed = parser.add_argument_group('Required arguments')
@@ -139,10 +167,9 @@ with tqdm(leave=True,unit=' messages', total=lineNumber, desc="Processing - Stag
         line[0] = time.mktime(combined.timetuple())
         counter.update(1)
 
-
 if args.graphlong:
     plotLong()
 elif args.graphweek:
-    plotWeek()
+    plotWeekHour()
 else:
     print("Looks like you forgot to pick a graph... Aborting.")
