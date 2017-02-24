@@ -79,7 +79,7 @@ def plotWeekLegacy(): #Legacy barchart plotting messges/day for a week (combined
     quit()
 
 def plotWeekHour(): #Plotting messges per hour for a week
-    print("Ok, now generating a week graph.")o
+    print("Ok, now generating a week graph.")
     plotWeekArray = copy.copy(processedArray)
     with tqdm(leave=True, unit= 'messages', total=lineNumber, desc="Preparing") as counter:
         for line in plotWeekArray:
@@ -114,16 +114,10 @@ kw.add_argument('-s', '--search', type=str, default="None", help='Search and onl
 
 args = parser.parse_args()
 
-textfile = open(args.input, 'r')
-textfileArray = []
-lineNumber = sum(1 for line in textfile)
-textfile = open(args.input, 'r')
-with tqdm(leave=True,unit=' messages', total=lineNumber, desc="Reading file") as counter:
-    with textfile as text:
-        for line in text:
-            line = line.strip()
-            textfileArray.append(line)
-            counter.update(1)
+with open(args.input, 'r') as textfile:
+    textfileArray = [line.strip() for line in textfile]
+lineNumber = len(textfileArray)
+print("Opened file.")
 
 processedArray = []
 with tqdm(leave=True,unit=' messages', total=lineNumber, desc="Processing - Stage 1") as counter:
