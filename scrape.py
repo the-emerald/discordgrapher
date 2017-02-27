@@ -38,4 +38,4 @@ async def on_ready():
 
 #----------------------------
 
-client.run('email', 'password')
+client.run(usertoken,bot=False)
