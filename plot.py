@@ -41,7 +41,7 @@ def plotLong(): #Plotting messages/day vs day
 def plotWeekHour(): #Plotting messges per hour for a week
     print("Ok, now generating a week graph.")
     plotWeekArray = copy.copy(processedArray)
-    with tqdm(leave=True, unit= 'messages', total=lineNumber, desc="Preparing") as counter:
+    with tqdm(leave=True, unit= ' messages', total=lineNumber, desc="Preparing") as counter:
         for line in plotWeekArray:
             second = datetime.timedelta(seconds=int((line[0]-345600)%604800))
             h = datetime.datetime(1,1,1)+second
