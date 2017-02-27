@@ -95,9 +95,9 @@ def plotWeekHour(): #Plotting messges per hour for a week
     fig, ax = plt.subplots()
     ax.plot(r[:,0],r[:,1])
     ax.grid(True)
-    plt.xlabel("Hour of Week (Starts Sunday 0000UTC)")
+    plt.xlabel("Day of Week (Starts Sunday 0000UTC)")
     plt.ylabel("Messages")
-    plt.xticks(np.arange(min(r[:,0]), max(r[:,0]), 24))
+    plt.xticks([0,24,48,72,96,120,144,168],["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"])
     plt.show()
     quit()
 
