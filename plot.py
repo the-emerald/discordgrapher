@@ -76,6 +76,10 @@ kw.add_argument('-u', '--usersearch', type=str, default='None', help='Search and
 
 args = parser.parse_args()
 
+if not args.graphlong and not args.graphweek:
+    print("No graph picked for plotting. Aborting.")
+    quit()
+
 with open(args.input, 'r') as textfile:
     textfileArray = [line.strip() for line in textfile]
 lineNumber = len(textfileArray)
@@ -145,5 +149,3 @@ if args.graphlong:
     plotLong()
 elif args.graphweek:
     plotWeekHour()
-else:
-    print("Looks like you forgot to pick a graph... Aborting.")
