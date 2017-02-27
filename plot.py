@@ -20,7 +20,6 @@ def plotLong(): #Plotting messages/day vs day
     print("Now crunching numbers...")
     plotLongDateString2 = [item for sublist in plotLongArray for item in sublist]
     plotLongCount = [[x,plotLongDateString2.count(x)] for x in set(plotLongDateString2)]
-    print(plotLongCount)
     r = np.asarray(plotLongCount)
     r = r[r[:,0].argsort()]
     years = mdates.YearLocator()
