@@ -59,6 +59,7 @@ def plotWeekHour(): #Plotting messges per hour for a week
     plt.xlabel("Day of Week (Starts Sunday 0000UTC)")
     plt.ylabel("Messages")
     plt.xticks([0,24,48,72,96,120,144,168],["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"])
+    plt.xlim([0,168])
     plt.show()
     quit()
 
