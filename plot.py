@@ -17,7 +17,7 @@ def plotLong(): #Plotting messages/day vs day
             counter.update(1)
     for row in plotLongArray:
         del row[1]
-    print("Now crunching numbers...")
+    print("Generating graph...")
     plotLongDateString2 = [item for sublist in plotLongArray for item in sublist]
     plotLongCount = [[x,plotLongDateString2.count(x)] for x in set(plotLongDateString2)]
     r = np.asarray(plotLongCount)
@@ -49,6 +49,7 @@ def plotWeekHour(): #Plotting messges per hour for a week
             counter.update(1)
     for row in plotWeekArray:
         del row[1]
+    print("Generating graph...")
     plotWeekFlat= [item for sublist in plotWeekArray for item in sublist]
     plotWeekHourCount = [[x,plotWeekFlat.count(x)] for x in set(plotWeekFlat)]
     r = np.asarray(plotWeekHourCount)
