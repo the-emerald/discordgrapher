@@ -71,7 +71,8 @@ optional = parser.add_argument_group('Plotting arguments, pick one')
 optional.add_argument('-l', '--graphlong', action='store_true', help='Graph a long-term graph')
 optional.add_argument('-w', '--graphweek', action='store_true', help='Graph a messages per hour over a weekday')
 kw = parser.add_argument_group('Graph modifications')
-kw.add_argument('-s', '--search', type=str, default="None", help='Search and only plot specific phrase.')
+kw.add_argument('-s', '--search', type=str, default='None', help='Search and only plot specific phrase.')
+kw.add_argument('-u', '--usersearch', type=str, default='None', help='Search and only plot a specific user.')
 
 args = parser.parse_args()
 
@@ -102,6 +103,21 @@ if args.search is not "None":
     processedArray.clear()
     processedArray = copy.copy(processedArraySearch)
     lineNumber = len(processedArray)
+    processedArraySearch.clear()
+
+if args.usersearch is not "None":
+    processedArraySearch = []
+    with tqdm(leave=True,unit=' messages', total=lineNumber, desc="Filtering user") as counter:
+        for line in processedArray:
+            if args.usersearch in line[1]:
+                processedArraySearch.append([line[0],line[1]])
+            else:
+                pass
+            counter.update(1)
+    processedArray.clear()
+    processedArray = copy.copy(processedArraySearch)
+    lineNumber = len(processedArray)
+    processedArraySearch.clear()
 
 if len(processedArray) is 0:
     print("Nothing found... Aborting.")
