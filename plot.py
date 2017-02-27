@@ -142,6 +142,9 @@ if args.search is not "None":
     processedArray = copy.copy(processedArraySearch)
     lineNumber = len(processedArray)
 
+if len(processedArray) is 0:
+    print("Nothing found... Aborting.")
+    quit()
 
 with tqdm(leave=True,unit=' messages', total=lineNumber, desc="Processing - Stage 2") as counter:
     for line in processedArray:
