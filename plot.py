@@ -90,35 +90,29 @@ processedArray = []
 with tqdm(leave=True,unit=' messages', total=lineNumber, desc="Processing - Stage 1") as counter:
     for line in textfileArray:
         lineSplitted = line.split(" - ") #lineSplitted[0] is timestamp, lineSplitted[1] is name, discard the rest
-        if args.search is not "None":
+        if args.search != "None":
             processedArray.append([lineSplitted[0],lineSplitted[1],lineSplitted[2]]) #lineSplitted[2] is the message.
         else:
             processedArray.append([lineSplitted[0],lineSplitted[1]])
         counter.update(1)
 
-if args.search is not "None":
+if args.search != "None":
     processedArraySearch = []
-    with tqdm(leave=True,unit=' messages', total=lineNumber, desc="Filtering keywords") as counter:
-        for line in processedArray:
-            if args.search in line[2]:
-                processedArraySearch.append([line[0],line[1]])
-            else:
-                pass
-            counter.update(1)
+    print("Filtering keywords...")
+    processedArraySearch = [line for line in processedArray if args.search in line[2]]
+    for row in processedArraySearch:
+        del row[2]
     processedArray.clear()
     processedArray = copy.copy(processedArraySearch)
     lineNumber = len(processedArray)
     processedArraySearch.clear()
 
-if args.usersearch is not "None":
+if args.usersearch != "None":
     processedArraySearch = []
-    with tqdm(leave=True,unit=' messages', total=lineNumber, desc="Filtering user") as counter:
-        for line in processedArray:
-            if args.usersearch in line[1]:
-                processedArraySearch.append([line[0],line[1]])
-            else:
-                pass
-            counter.update(1)
+    print("Filtering users...")
+    processedArraySearch = [line for line in processedArray if args.usersearch in line[1]]
+    for row in processedArraySearch:
+        del row[2]
     processedArray.clear()
     processedArray = copy.copy(processedArraySearch)
     lineNumber = len(processedArray)
