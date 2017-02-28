@@ -89,11 +89,11 @@ print("Opened file.")
 processedArray = []
 with tqdm(leave=True,unit=' messages', total=lineNumber, desc="Processing - Stage 1") as counter:
     for line in textfileArray:
-        lineSplitted = line.split(" - ") #lineSplitted[0] is timestamp, lineSplitted[1] is name, discard the rest
+        timestamp, name, message = line.split(" - ")[:3] #lineSplitted[0] is timestamp, lineSplitted[1] is name, discard the rest
         if args.search != "None":
-            processedArray.append([lineSplitted[0],lineSplitted[1],lineSplitted[2]]) #lineSplitted[2] is the message.
+            processedArray.append([timestamp, name, message]) #lineSplitted[2] is the message.
         else:
-            processedArray.append([lineSplitted[0],lineSplitted[1]])
+            processedArray.append([timestamp, name])
         counter.update(1)
 
 if args.search != "None":
