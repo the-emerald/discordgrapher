@@ -101,6 +101,10 @@ if not args.graphlong and not args.graphweek and not args.graphusers:
     print("No graph picked for plotting. Aborting.")
     quit()
 
+if args.graphusers and args.usersearch != "None":
+    print("Cannot plot most active users and filter for a specific user at the same time. Aborting.")
+    quit()
+
 with open(args.input, 'r') as textfile:
     textfileArray = [line.strip() for line in textfile]
 lineNumber = len(textfileArray)
