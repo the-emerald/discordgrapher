@@ -71,13 +71,14 @@ requiredNamed.add_argument('-i', '--input', type=str, help='Textfile source. Mus
 optional = parser.add_argument_group('Plotting arguments, pick one')
 optional.add_argument('-l', '--graphlong', action='store_true', help='Graph a long-term graph')
 optional.add_argument('-w', '--graphweek', action='store_true', help='Graph a messages per hour over a weekday')
+optional.add_argument('-a', '--graphusers', action='store_true', help='Graph the most active users.')
 kw = parser.add_argument_group('Graph modifications')
 kw.add_argument('-s', '--search', type=str, default='None', help='Search and only plot specific phrase.')
 kw.add_argument('-u', '--usersearch', type=str, default='None', help='Search and only plot a specific user.')
 
 args = parser.parse_args()
 
-if not args.graphlong and not args.graphweek:
+if not args.graphlong and not args.graphweek and not args.graphusers:
     print("No graph picked for plotting. Aborting.")
     quit()
 
@@ -150,3 +151,5 @@ if args.graphlong:
     plotLong()
 elif args.graphweek:
     plotWeekHour()
+elif args.graphusers:
+    plotUsers()
