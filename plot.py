@@ -64,6 +64,25 @@ def plotWeekHour(): #Plotting messges per hour for a week
     plt.show()
     quit()
 
+def plotUsers(): #Plot the most active users
+    usersToPlot = 10
+    print("Ok, now generating a most active users graph. This could take minutes for large servers!")
+    plotUserArray = [line[1][:10] for line in processedArray]
+    plotUserArrayCount = [[x,plotUserArray.count(x)] for x in set(plotUserArray)]
+    plotUserArrayCount.sort(key=lambda x: x[1], reverse=True)
+    plotUserArrayCount = plotUserArrayCount[:usersToPlot]
+    fig, ax = plt.subplots()
+    users = [line[0] for line in plotUserArrayCount]
+    frequency = [line[1] for line in plotUserArrayCount]
+    y_pos = np.arange(len(users))
+    plt.bar(y_pos, frequency, align='center', alpha=0.5)
+    plt.xlim([min(y_pos)-0.5, max(y_pos)+0.5])
+    plt.xticks(y_pos, users)
+    plt.ylabel('Messages')
+    plt.ylim
+    ax.grid(True)
+    plt.show()
+    quit()
 
 parser = argparse.ArgumentParser(description='Discord channel imager. Remember to scrape using scrape.py first!')
 requiredNamed = parser.add_argument_group('Required arguments')
