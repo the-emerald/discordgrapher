@@ -64,6 +64,25 @@ def plotWeekHour(): #Plotting messges per hour for a week
     plt.show()
     quit()
 
+def plotUsers(): #Plot the most active users
+    usersToPlot = 10
+    print("Ok, now generating a most active users graph. This could take minutes for large servers!")
+    plotUserArray = [line[1][:10] for line in processedArray]
+    plotUserArrayCount = [[x,plotUserArray.count(x)] for x in set(plotUserArray)]
+    plotUserArrayCount.sort(key=lambda x: x[1], reverse=True)
+    plotUserArrayCount = plotUserArrayCount[:usersToPlot]
+    fig, ax = plt.subplots()
+    users = [line[0] for line in plotUserArrayCount]
+    frequency = [line[1] for line in plotUserArrayCount]
+    y_pos = np.arange(len(users))
+    plt.bar(y_pos, frequency, align='center', alpha=0.5)
+    plt.xlim([min(y_pos)-0.5, max(y_pos)+0.5])
+    plt.xticks(y_pos, users)
+    plt.ylabel('Messages')
+    plt.ylim
+    ax.grid(True)
+    plt.show()
+    quit()
 
 parser = argparse.ArgumentParser(description='Discord channel imager. Remember to scrape using scrape.py first!')
 requiredNamed = parser.add_argument_group('Required arguments')
@@ -71,13 +90,14 @@ requiredNamed.add_argument('-i', '--input', type=str, help='Textfile source. Mus
 optional = parser.add_argument_group('Plotting arguments, pick one')
 optional.add_argument('-l', '--graphlong', action='store_true', help='Graph a long-term graph')
 optional.add_argument('-w', '--graphweek', action='store_true', help='Graph a messages per hour over a weekday')
+optional.add_argument('-a', '--graphusers', action='store_true', help='Graph the most active users.')
 kw = parser.add_argument_group('Graph modifications')
 kw.add_argument('-s', '--search', type=str, default='None', help='Search and only plot specific phrase.')
 kw.add_argument('-u', '--usersearch', type=str, default='None', help='Search and only plot a specific user.')
 
 args = parser.parse_args()
 
-if not args.graphlong and not args.graphweek:
+if not args.graphlong and not args.graphweek and not args.graphusers:
     print("No graph picked for plotting. Aborting.")
     quit()
 
@@ -144,3 +164,5 @@ if args.graphlong:
     plotLong()
 elif args.graphweek:
     plotWeekHour()
+elif args.graphusers:
+    plotUsers()
