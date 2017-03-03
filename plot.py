@@ -79,7 +79,6 @@ def plotUsers(): #Plot the most active users
     plt.xlim([min(y_pos)-0.5, max(y_pos)+0.5])
     plt.xticks(y_pos, users)
     plt.ylabel('Messages')
-    plt.ylim
     ax.grid(True)
     plt.show()
     quit()
@@ -113,9 +112,9 @@ print("Opened file.")
 processedArray = []
 with tqdm(leave=True,unit=' messages', total=lineNumber, desc="Processing - Stage 1") as counter:
     for line in textfileArray:
-        timestamp, name, message = line.split(" - ")[:3] #lineSplitted[0] is timestamp, lineSplitted[1] is name, discard the rest
+        timestamp, name, message = line.split(" - ")[:3]
         if args.search != "None":
-            processedArray.append([timestamp, name, message]) #lineSplitted[2] is the message.
+            processedArray.append([timestamp, name, message])
         else:
             processedArray.append([timestamp, name])
         counter.update(1)
